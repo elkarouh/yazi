@@ -41,6 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/):
 - Compatibility with legacy Git symlinks in package cache ([#4319])
 - Workaround Konsole kitty graphics and keyboard protocol bugs ([#4370])
 - Correct diacritic input for <kbd>Option</kbd> key combos in kitty keyboard protocol ([#4346])
+- Render `ya.input()` popup when `pos` is omitted ([#])
 
 ### Improved
 

@@ -1,5 +1,5 @@
 use mlua::{ExternalError, FromLua, Lua, Table, Value};
-use yazi_binding::position::Position;
+use yazi_binding::position::{Offset, Origin, Position};
 use yazi_macro::impl_data_any;
 
 use crate::input::{InputCallback, InputStyles};
@@ -37,6 +37,11 @@ impl InputOpt {
 		self.cb = Some(Box::new(cb));
 		self
 	}
+
+	// A zero-width position makes the popup invisible, so plugins omitting `pos` need a usable fallback
+	fn default_position() -> Position {
+		Position::new(Origin::TopCenter, Offset { y: 2, width: 50, ..Default::default() })
+	}
 }
 
 impl TryFrom<&Table> for InputOpt {
@@ -52,7 +57,7 @@ impl TryFrom<&Table> for InputOpt {
 			cursor:     None,
 			obscure:    t.raw_get("obscure")?,
 			blinking:   false,
-			position:   t.raw_get::<Position>("pos").unwrap_or_default().with_height(3),
+			position:   t.raw_get::<Position>("pos").unwrap_or_else(|_| Self::default_position()).with_height(3),
 			realtime:   t.raw_get("realtime")?,
 			completion: false,
 			cb:         None,
